@@ -1,0 +1,56 @@
+Beginning Training.
+Traceback (most recent call last):
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\tar.py", line 210, in <module>
+    main()
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\tar.py", line 196, in main
+    finetune_no_trainer(
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\tar.py", line 77, in finetune_no_trainer
+    dataloaders = dataloader_type(tokenizer, accelerator, args=args, model=model)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\modules\dataloaders.py", line 211, in get_tar_bio_dataloaders
+    ) = get_bio_pilecamel_forget_with_heldout_dataloaders(tokenizer, accelerator, args)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\modules\dataloaders.py", line 69, in get_bio_pilecamel_forget_with_heldout_dataloaders
+    ) = get_pile_bio_retain_forget_heldout_datasets(tokenizer, cutoff_len=256)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\modules\dataloaders.py", line 46, in get_pile_bio_retain_forget_heldout_datasets
+    retain_dataset, forget_dataset = load_pile_bio_retain_forget_data()
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\User\Desktop\Rubens_Stuff\TAR-replication\modules\dataloaders.py", line 13, in load_pile_bio_retain_forget_data
+    full_dataset = load_dataset("lapisrocks/biology-pile-labeled", token=True)["train"]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\datasets\load.py", line 2129, in load_dataset
+    builder_instance = load_dataset_builder(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\datasets\load.py", line 1849, in load_dataset_builder
+    dataset_module = dataset_module_factory(
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\datasets\load.py", line 1731, in dataset_module_factory
+    raise e1 from None
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\datasets\load.py", line 1601, in dataset_module_factory
+    dataset_readme_path = api.hf_hub_download(
+                          ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\utils\_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\hf_api.py", line 5252, in hf_hub_download
+    return hf_hub_download(
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\utils\_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\file_download.py", line 822, in hf_hub_download
+    hf_headers = build_hf_headers(
+                 ^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\utils\_deprecation.py", line 101, in inner_f
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\utils\_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\utils\_headers.py", line 126, in build_hf_headers
+    token_to_send = get_token_to_send(token)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\Desktop\Rubens_Stuff\TAR-replication\.venv\Lib\site-packages\huggingface_hub\utils\_headers.py", line 159, in get_token_to_send
+    raise LocalTokenNotFoundError(
+huggingface_hub.errors.LocalTokenNotFoundError: Token is required (`token=True`), but no token found. You need to provide a token or be logged in to Hugging Face with `huggingface-cli login` or `huggingface_hub.login`. See https://huggingface.co/settings/tokens.

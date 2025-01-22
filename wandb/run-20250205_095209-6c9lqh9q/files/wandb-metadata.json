@@ -1,0 +1,31 @@
+{
+  "os": "Windows-10-10.0.22631-SP0",
+  "python": "CPython 3.11.9",
+  "startedAt": "2025-02-04T20:52:10.194009Z",
+  "program": "c:\\Users\\User\\Desktop\\Rubens_Stuff\\TAR-replication\\tar.py",
+  "codePath": "tar.py",
+  "git": {
+    "remote": "https://github.com/RubenCastaing/TAR-replication.git",
+    "commit": "3e50c670a4fddd9fb85d01d31bc6e289688939c5"
+  },
+  "email": "castaingruben@gmail.com",
+  "root": "C:\\Users\\User\\Desktop\\Rubens_Stuff\\TAR-replication",
+  "host": "USER-PC",
+  "executable": "C:\\Users\\User\\Desktop\\Rubens_Stuff\\TAR-replication\\.venv\\Scripts\\python.exe",
+  "codePathLocal": "tar.py",
+  "cpu_count": 4,
+  "cpu_count_logical": 8,
+  "disk": {
+    "/": {
+      "total": "999649439744",
+      "used": "335551205376"
+    }
+  },
+  "memory": {
+    "total": "20868165632"
+  },
+  "cpu": {
+    "count": 4,
+    "countLogical": 8
+  }
+}

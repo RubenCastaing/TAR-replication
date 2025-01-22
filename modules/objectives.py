@@ -207,7 +207,7 @@ def obj_standard_max_next_token(
     return log_p_loss(
         outputs.logits,
         _filter_dpo_inputs(inputs, chosen).get("labels"),
-        model.vocab_size,
+        model.config.vocab_size,
     )
 
 

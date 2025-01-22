@@ -1,2 +1,5 @@
 *.env*
 *__pycache__*
+*API_keys.py*
+*.venv*
+dotenv

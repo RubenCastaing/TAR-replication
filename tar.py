@@ -17,7 +17,7 @@ from transformers import (
 )
 from transformers.models.llama.modeling_llama import LlamaDecoderLayer, LlamaForCausalLM
 
-from configs.config import SAVE_MODELS_DIR
+from configs.config import SAVE_MODELS_DIR, TOKEN
 from modules.dataloaders import (
     get_tar_dpo_dataloaders,
     get_tar_bio_dataloaders,
@@ -30,7 +30,6 @@ ALLOWED_MODULES = [
     LlamaDecoderLayer,
 ]
 
-
 def lambda_fn(module: torch.nn.Module):
     for allowed_module in ALLOWED_MODULES:
         if isinstance(module, allowed_module):
@@ -39,17 +38,17 @@ def lambda_fn(module: torch.nn.Module):
 
 
 def finetune_no_trainer(
-    model_name: str = "meta-llama/Meta-Llama-3-8B-Instruct",
+    model_name: str = "distilbert/distilgpt2",
     output_dir: str = None,
     model_type: AutoModelForCausalLM = AutoModelForCausalLM,
     loop_type: Callable = tar_training_loop,
     dataloader_type: Callable = get_tar_bio_dataloaders,
-    tokenizer: str = "meta-llama/Meta-Llama-3-8B-Instruct",
+    tokenizer: str = "distilbert/distilgpt2",
     args: argparse.Namespace = None,
 ):
     # Preparing FSDP (will remove for for FSDP2)
     auto_wrap_policy = functools.partial(lambda_auto_wrap_policy, lambda_fn=lambda_fn)
-    model = model_type.from_pretrained(model_name)
+    model = model_type.from_pretrained(model_name, use_auth_token = TOKEN)
     FSDP_PLUGIN = FullyShardedDataParallelPlugin(
         auto_wrap_policy=auto_wrap_policy,
     )
@@ -72,6 +71,19 @@ def finetune_no_trainer(
     accelerator.free_memory()
     tokenizer = AutoTokenizer.from_pretrained(tokenizer)
     tokenizer.pad_token = tokenizer.eos_token
+
+    chat_template = """
+    {% for message in messages %}
+        {% if message['role'] == 'user' %}
+            User: {{ message['content'] }}
+        {% elif message['role'] == 'assistant' %}
+            Assistant: {{ message['content'] }}
+        {% endif %}
+    {% endfor %}
+    Assistant:
+    """
+    # Explicitly set the chat template
+    tokenizer.chat_template = chat_template  
 
     # prepare model before optimizer: https://huggingface.co/blog/pytorch-fsdp
     model = accelerator.prepare_model(model)
@@ -107,6 +119,7 @@ DATALOADER_MAP = {
     "bio": get_tar_bio_dataloaders,
     "cyber": get_tar_cyber_dataloaders,
     "dpo_anthropic": get_tar_dpo_dataloaders,
+    "bio-multi-dists": get_tar_bio_dataloaders,
 }
 
 # Map for training loops
@@ -115,14 +128,12 @@ TRAINING_CONFIG = {
     "tar_trainer": tar_training_loop,
 }
 
-# Map for model types, can add more here
 MODEL_MAP = {
-    "llama3": LlamaForCausalLM,
+    "distilgpt2": AutoModelForCausalLM,
 }
 
-# Map for tokenizers, can add more here
 TOKENIZER_MAP = {
-    "llama3": "meta-llama/Meta-Llama-3-8B-Instruct",
+    "distilgpt2": "distilgpt2"
 }
 
 
@@ -144,13 +155,13 @@ def main():
         "--base_model_name",
         "-bm",
         type=str,
-        default="meta-llama/Meta-Llama-3-8B-Instruct",
+        default="distilgpt2",
     )
     parser.add_argument(
         "--retain_model_name",
         "-rm",
         type=str,
-        default="meta-llama/Meta-Llama-3-8B-Instruct",
+        default="distilgpt2",
     )
     parser.add_argument("--tar_inner_loop_steps", "-is", type=int, default=1)
     parser.add_argument("--tar_num_tasks_sampled", "-mnts", type=int, default=1)
@@ -185,10 +196,11 @@ def main():
     parser.add_argument(
         "--adversary_lr_samples", "-als", type=str, default="2e-6,2e-5,4e-5"
     )
-    parser.add_argument("--wandb", "-wb", action="store_true")
+    parser.add_argument("--wandb", "-wb", action="store_true") #Removing weights and biases
     parser.add_argument("--unbounded", "-ub", action="store_true")
     parser.add_argument("--retain_same_base", "-rsb", action="store_true")
-    parser.add_argument("--base", "-b", type=str, default="llama")
+    parser.add_argument("--base", "-b", type=str, default="distilgpt2", help="Specify the base model") #adding in GPT-2 small for
+    #parser.add_argument("--base", "-b", type=str, default="llama3") #This line is currently introducing errors. I have to decide which model to it it on
     parser.add_argument(
         "--wandb_project_name", "-wpn", type=str, default="tar_training"
     )
